@@ -18,7 +18,7 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc. (http://ellislab.com/)
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
  * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -208,27 +208,15 @@ class CI_DB_oci8_driver extends CI_DB {
 	/**
 	 * Non-persistent database connection
 	 *
+	 * @param	bool	$persistent
 	 * @return	resource
 	 */
-	public function db_connect()
+	public function db_connect($persistent = FALSE)
 	{
-		return ( ! empty($this->char_set))
-			? @oci_connect($this->username, $this->password, $this->dsn, $this->char_set)
-			: @oci_connect($this->username, $this->password, $this->dsn);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Persistent database connection
-	 *
-	 * @return	resource
-	 */
-	public function db_pconnect()
-	{
+		$func = ($persistent === TRUE) ? 'oci_pconnect' : 'oci_connect';
 		return empty($this->char_set)
-			? @oci_pconnect($this->username, $this->password, $this->dsn)
-			: @oci_pconnect($this->username, $this->password, $this->dsn, $this->char_set);
+			? $func($this->username, $this->password, $this->dsn)
+			: $func($this->username, $this->password, $this->dsn, $this->char_set);
 	}
 
 	// --------------------------------------------------------------------
